@@ -29,6 +29,12 @@ export function errorHandler(
     return;
   }
 
+  // An id in the URL or body is not a valid id (e.g. "abc")
+  if (err.name === "CastError") {
+    res.status(400).json({ error: "invalid id" });
+    return;
+  }
+
   // Anything else is a bug on our side. Log it, but do not leak details to the client.
   console.error(err);
   res.status(500).json({ error: "Something went wrong" });

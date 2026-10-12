@@ -4,6 +4,7 @@ import { env } from "./config/env";
 import { errorHandler } from "./middleware/errorHandler";
 import { authRouter } from "./routes/auth.routes";
 import { campaignRouter } from "./routes/campaign.routes";
+import { submissionRouter } from "./routes/submission.routes";
 
 // Build the Express app. More routes are added in later commits.
 export const app = express();
@@ -18,6 +19,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/campaigns", campaignRouter);
+app.use("/api/submissions", submissionRouter);
 
 // Must be last, so it catches errors from everything above
 app.use(errorHandler);

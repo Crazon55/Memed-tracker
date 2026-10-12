@@ -1,4 +1,4 @@
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { HttpError } from "../middleware/errorHandler";
 import { Campaign, ICampaign, IMilestone } from "../models/Campaign";
 
@@ -93,6 +93,34 @@ export async function listLiveCampaigns(): Promise<CampaignView[]> {
     result.push(toView(campaign));
   }
   return result;
+}
+
+// Take `amount` rupees out of the campaign budget, but ONLY if it still fits.
+// The check and the update happen in ONE database operation, so two requests at the
+// same moment cannot both pass the check. Returns false if it no longer fits.
+export async function claimBudget(campaignId: Types.ObjectId, amount: number): Promise<boolean> {
+  const updated = await Campaign.findOneAndUpdate(
+    {
+      _id: campaignId,
+      // only match if spent + amount is still within totalBudget
+      $expr: { $lte: [{ $add: ["$spent", amount] }, "$totalBudget"] },
+    },
+    { $inc: { spent: amount } } // $inc adds to the stored number inside the database
+  );
+  return updated !== null; // null means no campaign matched, so the budget did not fit
+}
+
+// Give a claimed amount back (used when the submission could not be updated after the claim)
+export async function refundBudget(campaignId: Types.ObjectId, amount: number): Promise<void> {
+  await Campaign.updateOne({ _id: campaignId }, { $inc: { spent: -amount }, $set: { exhausted: false } });
+}
+
+// Set exhausted = true if the whole budget is now used up
+export async function markExhaustedIfFull(campaignId: Types.ObjectId): Promise<void> {
+  await Campaign.updateOne(
+    { _id: campaignId, $expr: { $gte: ["$spent", "$totalBudget"] } },
+    { $set: { exhausted: true } }
+  );
 }
 
 // All campaigns made by one brand, with spent and remaining
