@@ -1,4 +1,17 @@
-// Placeholder home page. Login, brand and creator pages are added in the frontend commit.
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { getSession, homePathFor } from "../lib/auth";
+
+// The home page only sends you somewhere: your own page if logged in, otherwise login
 export default function HomePage() {
-  return <h1>Meme&apos;d Campaign Payout Tracker</h1>;
+  const router = useRouter();
+
+  useEffect(() => {
+    const session = getSession();
+    router.replace(session ? homePathFor(session.user.role) : "/login");
+  }, [router]);
+
+  return <p>Loading...</p>;
 }
