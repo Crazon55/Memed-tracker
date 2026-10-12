@@ -15,6 +15,14 @@ export interface AuthRequest extends Request {
   user?: AuthUser;
 }
 
+// Controllers call this to get the logged-in user (requireAuth must run first)
+export function getUser(req: AuthRequest): AuthUser {
+  if (!req.user) {
+    throw new HttpError(401, "please log in");
+  }
+  return req.user;
+}
+
 // Put this before any route that needs a logged-in user
 export function requireAuth(req: AuthRequest, _res: Response, next: NextFunction): void {
   // The browser sends: Authorization: Bearer <token>
