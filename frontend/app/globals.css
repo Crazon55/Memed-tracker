@@ -1,0 +1,228 @@
+/* All styling for the app lives in this one file. Plain CSS, no libraries. */
+
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1f2430;
+  --muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --border: #e3e6ee;
+  --ok: #15803d;
+  --bad: #b91c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 28px 0 12px;
+}
+
+/* Form controls */
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+}
+
+button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button.secondary {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+button.secondary:hover {
+  background: #f0f1f6;
+}
+
+button.small {
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+a {
+  color: var(--primary);
+}
+
+/* Layout helpers */
+.form {
+  display: grid;
+  gap: 10px;
+  max-width: 460px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth {
+  max-width: 380px;
+  margin-top: 64px;
+}
+
+.auth h1 {
+  margin-bottom: 16px;
+}
+
+/* Boxes */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.stat {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--bad);
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.success {
+  color: var(--ok);
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+th {
+  background: #fafbfe;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Live / Exhausted label */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge.live {
+  background: #dcfce7;
+  color: var(--ok);
+}
+
+.badge.done {
+  background: #fee2e2;
+  color: var(--bad);
+}
+
+/* Spent-vs-budget bar */
+.bar {
+  height: 8px;
+  min-width: 90px;
+  background: #e8eaf2;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar > div {
+  height: 100%;
+  background: var(--primary);
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-wrap: wrap;
+  }
+}

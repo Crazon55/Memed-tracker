@@ -28,20 +28,22 @@ export default function LoginPage() {
   }
 
   return (
-    <main>
+    <main className="auth">
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8, maxWidth: 320 }}>
-        <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Log in</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <p>
+      <div className="card">
+        <form onSubmit={handleSubmit} className="form">
+          <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit">Log in</button>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
+      <p className="muted">
         No account? <Link href="/signup">Sign up</Link>
       </p>
     </main>

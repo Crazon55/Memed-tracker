@@ -30,25 +30,27 @@ export default function SignupPage() {
   }
 
   return (
-    <main>
+    <main className="auth">
       <h1>Sign up</h1>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8, maxWidth: 320 }}>
-        <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input
-          type="password"
-          placeholder="Password (6+ characters)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="creator">Creator</option>
-          <option value="brand">Brand</option>
-        </select>
-        <button type="submit">Create account</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <p>
+      <div className="card">
+        <form onSubmit={handleSubmit} className="form">
+          <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="password"
+            placeholder="Password (6+ characters)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="creator">Creator</option>
+            <option value="brand">Brand</option>
+          </select>
+          <button type="submit">Create account</button>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
+      <p className="muted">
         Already have an account? <Link href="/login">Log in</Link>
       </p>
     </main>

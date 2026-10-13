@@ -80,60 +80,72 @@ export default function CreatorPage() {
 
   return (
     <main>
-      <h1>Creator dashboard</h1>
-      <button onClick={logout}>Log out</button>
-      <h2>Total earnings: Rs {mine.totalEarnings}</h2>
+      <div className="page-header">
+        <h1>Creator dashboard</h1>
+        <button className="secondary" onClick={logout}>
+          Log out
+        </button>
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      <h2>Total earnings</h2>
+      <div className="card">
+        <div className="stat">Rs {mine.totalEarnings}</div>
+      </div>
+
+      {error && <p className="error">{error}</p>}
+      {message && <p className="success">{message}</p>}
 
       <h2>Live campaigns</h2>
-      {campaigns.length === 0 && <p>No live campaigns right now.</p>}
+      {campaigns.length === 0 && <p className="muted">No live campaigns right now.</p>}
       {campaigns.map((c) => (
-        <div key={c.id} style={{ border: "1px solid #ccc", padding: 8, marginBottom: 8 }}>
-          <strong>{c.name}</strong> ({c.platform}), Rs {c.remaining} left
-          <div>
-            {c.milestones.map((m) => `${m.viewThreshold} views = Rs ${m.payout}`).join(" | ")}
-          </div>
+        <div key={c.id} className="card">
+          <strong>{c.name}</strong> <span className="muted">({c.platform})</span>
+          <div className="muted">Rs {c.remaining} left in the budget</div>
+          <div>{c.milestones.map((m) => `${m.viewThreshold} views = Rs ${m.payout}`).join("  |  ")}</div>
         </div>
       ))}
 
       <h2>Submit a post</h2>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8, maxWidth: 420 }}>
-        <select value={campaignId} onChange={(e) => setCampaignId(e.target.value)}>
-          <option value="">Choose a campaign</option>
-          {campaigns.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <input
-          placeholder="Post link"
-          value={postLink}
-          onChange={(e) => setPostLink(e.target.value)}
-        />
-        <button type="submit">Submit post</button>
-      </form>
+      <div className="card">
+        <form onSubmit={handleSubmit} className="form">
+          <select value={campaignId} onChange={(e) => setCampaignId(e.target.value)}>
+            <option value="">Choose a campaign</option>
+            {campaigns.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          <input
+            placeholder="Post link"
+            value={postLink}
+            onChange={(e) => setPostLink(e.target.value)}
+          />
+          <button type="submit">Submit post</button>
+        </form>
+      </div>
 
       <h2>Your posts</h2>
-      {mine.submissions.length === 0 && <p>No posts yet.</p>}
+      {mine.submissions.length === 0 && <p className="muted">No posts yet.</p>}
       {mine.submissions.map((s) => (
-        <div key={s.id} style={{ border: "1px solid #ccc", padding: 8, marginBottom: 8 }}>
+        <div key={s.id} className="card">
           <div>
-            {s.campaignName}: {s.postLink}
+            <strong>{s.campaignName}</strong>
           </div>
+          <div className="muted">{s.postLink}</div>
           <div>
             {s.views} views, Rs {s.amountPaid} earned
           </div>
-          <div>
+          <div className="row" style={{ marginTop: 10 }}>
             {/* Demo only: stands in for Instagram/YouTube reporting new views */}
             <input
               placeholder="Simulate new view count"
               value={viewsInput[s.id] ?? ""}
               onChange={(e) => setViewsInput({ ...viewsInput, [s.id]: e.target.value })}
             />
-            <button onClick={() => sendViews(s.id)}>Update views</button>
+            <button className="small" onClick={() => sendViews(s.id)}>
+              Update views
+            </button>
           </div>
         </div>
       ))}

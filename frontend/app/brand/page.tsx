@@ -87,75 +87,100 @@ export default function BrandPage() {
     router.push("/login");
   }
 
+  // How much of the budget is used, as a number from 0 to 100 (for the bar)
+  function percentUsed(campaign: Campaign): number {
+    return Math.round((campaign.spent / campaign.totalBudget) * 100);
+  }
+
   return (
     <main>
-      <h1>Brand dashboard</h1>
-      <button onClick={logout}>Log out</button>
+      <div className="page-header">
+        <h1>Brand dashboard</h1>
+        <button className="secondary" onClick={logout}>
+          Log out
+        </button>
+      </div>
 
       <h2>Create a campaign</h2>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: 8, maxWidth: 420 }}>
-        <input placeholder="Campaign name" value={name} onChange={(e) => setName(e.target.value)} />
-        <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
-          <option value="Instagram">Instagram</option>
-          <option value="YouTube">YouTube</option>
-        </select>
-        <input
-          placeholder="Total budget (Rs)"
-          value={totalBudget}
-          onChange={(e) => setTotalBudget(e.target.value)}
-        />
+      <div className="card">
+        <form onSubmit={handleSubmit} className="form">
+          <input placeholder="Campaign name" value={name} onChange={(e) => setName(e.target.value)} />
+          <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
+            <option value="Instagram">Instagram</option>
+            <option value="YouTube">YouTube</option>
+          </select>
+          <input
+            placeholder="Total budget (Rs)"
+            value={totalBudget}
+            onChange={(e) => setTotalBudget(e.target.value)}
+          />
 
-        <strong>Milestones (views, then payout in Rs)</strong>
-        {rows.map((row, index) => (
-          <div key={index} style={{ display: "flex", gap: 8 }}>
-            <input
-              placeholder="Views"
-              value={row.viewThreshold}
-              onChange={(e) => updateRow(index, "viewThreshold", e.target.value)}
-            />
-            <input
-              placeholder="Payout"
-              value={row.payout}
-              onChange={(e) => updateRow(index, "payout", e.target.value)}
-            />
-            <button type="button" onClick={() => removeRow(index)}>
-              Remove
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={addRow}>
-          Add milestone
-        </button>
-        <button type="submit">Create campaign</button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+          <strong>Milestones (views, then payout in Rs)</strong>
+          {rows.map((row, index) => (
+            <div key={index} className="row">
+              <input
+                placeholder="Views"
+                value={row.viewThreshold}
+                onChange={(e) => updateRow(index, "viewThreshold", e.target.value)}
+              />
+              <input
+                placeholder="Payout"
+                value={row.payout}
+                onChange={(e) => updateRow(index, "payout", e.target.value)}
+              />
+              <button type="button" className="secondary" onClick={() => removeRow(index)}>
+                Remove
+              </button>
+            </div>
+          ))}
+          <button type="button" className="secondary" onClick={addRow}>
+            Add milestone
+          </button>
+          <button type="submit">Create campaign</button>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
 
       <h2>Your campaigns</h2>
-      {campaigns.length === 0 && <p>No campaigns yet.</p>}
-      <table cellPadding={6}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Platform</th>
-            <th>Budget</th>
-            <th>Spent</th>
-            <th>Remaining</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {campaigns.map((c) => (
-            <tr key={c.id}>
-              <td>{c.name}</td>
-              <td>{c.platform}</td>
-              <td>Rs {c.totalBudget}</td>
-              <td>Rs {c.spent}</td>
-              <td>Rs {c.remaining}</td>
-              <td>{c.exhausted ? "Exhausted" : "Live"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {campaigns.length === 0 && <p className="muted">No campaigns yet.</p>}
+      {campaigns.length > 0 && (
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Platform</th>
+                <th>Budget</th>
+                <th>Spent</th>
+                <th>Remaining</th>
+                <th>Used</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {campaigns.map((c) => (
+                <tr key={c.id}>
+                  <td>{c.name}</td>
+                  <td>{c.platform}</td>
+                  <td>Rs {c.totalBudget}</td>
+                  <td>Rs {c.spent}</td>
+                  <td>Rs {c.remaining}</td>
+                  <td>
+                    <div className="bar">
+                      <div style={{ width: `${percentUsed(c)}%` }} />
+                    </div>
+                  </td>
+                  <td>
+                    <span className={c.exhausted ? "badge done" : "badge live"}>
+                      {c.exhausted ? "Exhausted" : "Live"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </main>
   );
 }
