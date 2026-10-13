@@ -20,7 +20,7 @@ const submissionSchema = new Schema<ISubmission>(
   { timestamps: true }
 );
 
-// The same link can only be submitted once per campaign
-submissionSchema.index({ campaign: 1, postLink: 1 }, { unique: true });
+// One post can only be submitted once, in any campaign, so it cannot be paid twice
+submissionSchema.index({ postLink: 1 }, { unique: true });
 
 export const Submission = model<ISubmission>("Submission", submissionSchema);

@@ -29,6 +29,12 @@ export function errorHandler(
     return;
   }
 
+  // MongoDB refused a duplicate value (a unique email or post link, e.g. two requests at once)
+  if ((err as Error & { code?: number }).code === 11000) {
+    res.status(409).json({ error: "that value already exists" });
+    return;
+  }
+
   // An id in the URL or body is not a valid id (e.g. "abc")
   if (err.name === "CastError") {
     res.status(400).json({ error: "invalid id" });

@@ -47,15 +47,17 @@ export async function createSubmission(
     throw new HttpError(400, "this campaign has no budget left");
   }
 
-  const existing = await Submission.findOne({ campaign: campaign._id, postLink: postLink });
+  // A post can only be submitted once, to any campaign, so it can never be paid twice
+  const link = postLink.trim();
+  const existing = await Submission.findOne({ postLink: link });
   if (existing) {
-    throw new HttpError(409, "this post was already submitted to this campaign");
+    throw new HttpError(409, "this post was already submitted");
   }
 
   const submission = await Submission.create({
     campaign: campaign._id,
     creator: creatorId,
-    postLink: postLink,
+    postLink: link,
   });
 
   return {

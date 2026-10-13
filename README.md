@@ -123,7 +123,7 @@ Send the token as `Authorization: Bearer <token>`.
 - **Live campaign:** a campaign with remaining budget above zero (`spent < totalBudget`). Submitting to a campaign with no budget left is rejected.
 - **Money is whole rupees** (integers), so there are no rounding issues.
 - **The views endpoint has no login or role check**, as the brief asks. In a real system it would be a signed webhook or an API key from the platform.
-- **One post link can be submitted once per campaign.**
+- **A post link can be submitted only once, to any campaign.** This stops one post from being paid by two campaigns. The link is not checked against the platform, so ownership of the post is not verified; a real version would confirm it through the Instagram or YouTube API.
 - **The view count is stored as the latest reported value**, even if it is lower than before.
 - **Milestones are sorted by views when a campaign is created.** The highest threshold crossed wins; the ladder is not checked for rising payouts.
 - **Roles are chosen at signup.** There is no admin role.
