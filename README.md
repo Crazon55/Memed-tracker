@@ -21,6 +21,7 @@ The backend runs on Render's free plan and goes to sleep when idle, so the first
 3. Under "Your posts", enter a view count (this stands in for Instagram or YouTube reporting views) and click **Update views**.
 4. Send a bigger number later: only the difference is paid, and repeating the same number pays nothing.
 5. Log back in as the brand to see spent vs remaining. When the budget is used up the campaign shows as **Exhausted**.
+6. To see the spike flag, send a small count first (for example `1000`) and then a very large one (for example `50000`). The post is paid as usual and also shows **Flagged for review**.
 
 ## Project structure
 
@@ -30,6 +31,7 @@ backend/src/
   models/        User.ts, Campaign.ts, Submission.ts
   middleware/    auth.ts (login check), requireRole.ts, errorHandler.ts
   services/      payout.ts (pure payout calculation, no database)
+                 spike.ts (flags unusually fast view jumps, no database)
                  campaign.service.ts, submission.service.ts, auth.service.ts
   controllers/   thin: read the request, call a service, send the response
   routes/        auth, campaign, submission URLs
@@ -121,6 +123,7 @@ Send the token as `Authorization: Bearer <token>`.
 - **Idempotent payouts:** amount owed = highest milestone amount minus the amount already paid for that post. Repeating the same update pays nothing more. If views go down, nothing is paid back or taken away.
 - **Budget runs out mid-payout:** the creator receives whatever is left (a partial payout), it is recorded in `amountPaid`, and the campaign is marked `exhausted`. The unpaid difference stays unpaid, because there is no way to top up a budget in this version.
 - **Live campaign:** a campaign with remaining budget above zero (`spent < totalBudget`). Submitting to a campaign with no budget left is rejected.
+- **Unusual view spikes are flagged, never blocked.** When a post's views jump to at least 10 times the previous count, and by at least 10,000 views, the post is marked `flagged` so a person can review it. The payment still goes through, because real posts can go viral. The first report for a post is never flagged, since there is nothing to compare it with. The brand sees a count of flagged posts per campaign. A real version would also look at views per hour and engagement.
 - **Money is whole rupees** (integers), so there are no rounding issues.
 - **The views endpoint has no login or role check**, as the brief asks. In a real system it would be a signed webhook or an API key from the platform.
 - **A post link can be submitted only once, to any campaign.** This stops one post from being paid by two campaigns. The link is not checked against the platform, so ownership of the post is not verified; a real version would confirm it through the Instagram or YouTube API.
@@ -150,6 +153,7 @@ The backend keeps no state between requests, so the first step is easy: run seve
 | Change how the budget is protected from overspending | `claimBudget` in `backend/src/services/campaign.service.ts` |
 | Change what happens when the budget runs out | `payout.ts` (step 3) and `submission.service.ts` |
 | Change what counts as a live campaign | `listLiveCampaigns` in `campaign.service.ts` |
+| Change the spike-flag rule | `backend/src/services/spike.ts` |
 | Add a role | `models/User.ts` (the `Role` type and `enum`), then use `requireRole("...")` in the routes |
 | Add a field to campaigns | `models/Campaign.ts`, `campaign.service.ts` (`CampaignInput`, `createCampaign`, `toView`), `frontend/lib/api.ts`, `frontend/app/brand/page.tsx` |
 | Add or remove a platform | `models/Campaign.ts` and the platform check in `campaign.service.ts`, plus the dropdown in `frontend/app/brand/page.tsx` |
