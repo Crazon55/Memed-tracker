@@ -1,5 +1,7 @@
 # Meme'd Campaign Payout Tracker
 
+Built by Krishna Koushik (portfolio: https://krishnakoushik.in/).
+
 A small web app where brands run campaigns and creators post content for them. Creators are paid through a milestone ladder (for example 10K views = Rs 500, 50K = Rs 2,000, 100K = Rs 5,000), and a campaign can never pay out more than its budget.
 
 - **Backend:** Node.js, TypeScript, Express, MongoDB (Mongoose), JWT auth
