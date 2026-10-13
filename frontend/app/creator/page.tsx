@@ -15,6 +15,8 @@ export default function CreatorPage() {
   const [viewsInput, setViewsInput] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  // Stays false until we know the visitor is a logged-in creator
+  const [ready, setReady] = useState(false);
 
   async function loadAll() {
     try {
@@ -32,6 +34,7 @@ export default function CreatorPage() {
       router.replace("/login");
       return;
     }
+    setReady(true);
     loadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -76,6 +79,15 @@ export default function CreatorPage() {
   function logout() {
     clearSession();
     router.push("/login");
+  }
+
+  // Show nothing but "Loading..." until the role check has passed
+  if (!ready) {
+    return (
+      <main>
+        <p className="muted">Loading...</p>
+      </main>
+    );
   }
 
   return (

@@ -23,6 +23,8 @@ export default function BrandPage() {
     { viewThreshold: "100000", payout: "5000" },
   ]);
   const [error, setError] = useState("");
+  // Stays false until we know the visitor is a logged-in brand
+  const [ready, setReady] = useState(false);
 
   async function loadCampaigns() {
     try {
@@ -39,6 +41,7 @@ export default function BrandPage() {
       router.replace("/login");
       return;
     }
+    setReady(true);
     loadCampaigns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -90,6 +93,15 @@ export default function BrandPage() {
   // How much of the budget is used, as a number from 0 to 100 (for the bar)
   function percentUsed(campaign: Campaign): number {
     return Math.round((campaign.spent / campaign.totalBudget) * 100);
+  }
+
+  // Show nothing but "Loading..." until the role check has passed
+  if (!ready) {
+    return (
+      <main>
+        <p className="muted">Loading...</p>
+      </main>
+    );
   }
 
   return (
