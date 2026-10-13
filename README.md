@@ -14,7 +14,7 @@ A small web app where brands run campaigns and creators post content for them. C
 
 The backend runs on Render's free plan and goes to sleep when idle, so the first request after a quiet period can take up to a minute.
 
-**Try it in five steps**
+**Try it in six steps**
 
 1. Sign up as a **Brand**, create a campaign with a budget (for example Rs 3000) and keep the default milestones.
 2. Log out, sign up as a **Creator**, and submit a post link to that campaign.
@@ -35,7 +35,7 @@ backend/src/
                  campaign.service.ts, submission.service.ts, auth.service.ts
   controllers/   thin: read the request, call a service, send the response
   routes/        auth, campaign, submission URLs
-  __tests__/     payout.test.ts, budget.test.ts
+  __tests__/     payout.test.ts, budget.test.ts, spike.test.ts
 frontend/
   app/           login, signup, brand and creator pages
   lib/           api.ts (the one fetch wrapper), auth.ts (token storage)
@@ -77,6 +77,8 @@ docker compose up --build
 ```
 
 This starts MongoDB, the backend (port 4000) and the frontend (port 3000). Set `JWT_SECRET` in your shell first for anything other than a quick try.
+
+The live deployment uses Render's Node runtime and Vercel, not these Docker files. The Dockerfiles and compose file follow the standard pattern, but I have not run them end to end.
 
 ## Environment variables
 
