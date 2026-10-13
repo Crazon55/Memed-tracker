@@ -9,7 +9,7 @@ A small web app where brands run campaigns and creators post content for them. C
 
 **Live links**
 
-- Frontend: https://memed-tracker-p9xid37oy-koushiks-projects-700b1c81.vercel.app
+- Frontend: https://memed-tracker.vercel.app
 - Backend API: https://memed-tracker-api.onrender.com (health check: `/health`)
 
 The backend runs on Render's free plan and goes to sleep when idle, so the first request after a quiet period can take up to a minute.
