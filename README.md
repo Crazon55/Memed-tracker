@@ -9,8 +9,18 @@ A small web app where brands run campaigns and creators post content for them. C
 
 **Live links**
 
-- Frontend: _to be added_
-- Backend API: _to be added_
+- Frontend: https://memed-tracker-p9xid37oy-koushiks-projects-700b1c81.vercel.app
+- Backend API: https://memed-tracker-api.onrender.com (health check: `/health`)
+
+The backend runs on Render's free plan and goes to sleep when idle, so the first request after a quiet period can take up to a minute.
+
+**Try it in five steps**
+
+1. Sign up as a **Brand**, create a campaign with a budget (for example Rs 3000) and keep the default milestones.
+2. Log out, sign up as a **Creator**, and submit a post link to that campaign.
+3. Under "Your posts", enter a view count (this stands in for Instagram or YouTube reporting views) and click **Update views**.
+4. Send a bigger number later: only the difference is paid, and repeating the same number pays nothing.
+5. Log back in as the brand to see spent vs remaining. When the budget is used up the campaign shows as **Exhausted**.
 
 ## Project structure
 
