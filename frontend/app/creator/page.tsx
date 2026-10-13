@@ -69,6 +69,9 @@ export default function CreatorPage() {
       if (result.budgetRanOut) {
         text += " The campaign budget ran out, so this was a partial payout.";
       }
+      if (result.flagged) {
+        text += " The jump in views looked unusual, so the post was flagged for review.";
+      }
       setMessage(text);
       await loadAll();
     } catch (err) {
@@ -146,7 +149,8 @@ export default function CreatorPage() {
           </div>
           <div className="muted">{s.postLink}</div>
           <div>
-            {s.views} views, Rs {s.amountPaid} earned
+            {s.views} views, Rs {s.amountPaid} earned{" "}
+            {s.flagged && <span className="badge warn">Flagged for review</span>}
           </div>
           <div className="row" style={{ marginTop: 10 }}>
             {/* Demo only: stands in for Instagram/YouTube reporting new views */}

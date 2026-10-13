@@ -167,6 +167,7 @@ export default function BrandPage() {
                 <th>Remaining</th>
                 <th>Used</th>
                 <th>Status</th>
+                <th>Flagged posts</th>
               </tr>
             </thead>
             <tbody>
@@ -186,6 +187,9 @@ export default function BrandPage() {
                     <span className={c.exhausted ? "badge done" : "badge live"}>
                       {c.exhausted ? "Exhausted" : "Live"}
                     </span>
+                  </td>
+                  <td>
+                    {c.flaggedPosts > 0 ? <span className="badge warn">{c.flaggedPosts} flagged</span> : "-"}
                   </td>
                 </tr>
               ))}

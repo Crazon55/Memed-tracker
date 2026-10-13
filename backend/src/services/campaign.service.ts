@@ -1,6 +1,7 @@
 import { HydratedDocument, Types } from "mongoose";
 import { HttpError } from "../middleware/errorHandler";
 import { Campaign, ICampaign, IMilestone } from "../models/Campaign";
+import { Submission } from "../models/Submission";
 
 // What the brand sends when creating a campaign (any field may be missing, we check)
 export interface CampaignInput {
@@ -19,6 +20,7 @@ export interface CampaignView {
   spent: number;
   remaining: number; // totalBudget - spent, worked out here, not stored
   exhausted: boolean;
+  flaggedPosts: number; // posts in this campaign whose views jumped unusually fast
   milestones: IMilestone[];
 }
 
@@ -42,6 +44,7 @@ function toView(campaign: HydratedDocument<ICampaign>): CampaignView {
     spent: campaign.spent,
     remaining: campaign.totalBudget - campaign.spent,
     exhausted: campaign.exhausted,
+    flaggedPosts: 0, // filled in by listBrandCampaigns
     milestones: milestones,
   };
 }
@@ -127,9 +130,20 @@ export async function markExhaustedIfFull(campaignId: Types.ObjectId): Promise<v
 export async function listBrandCampaigns(brandId: string): Promise<CampaignView[]> {
   const campaigns = await Campaign.find({ brand: brandId }).sort({ createdAt: -1 });
 
+  // Count the flagged posts in each campaign, using one query for all of them
+  const campaignIds = campaigns.map((c) => c._id);
+  const flaggedPosts = await Submission.find({ campaign: { $in: campaignIds }, flagged: true });
+  const flaggedCount: Record<string, number> = {};
+  for (const post of flaggedPosts) {
+    const key = post.campaign.toString();
+    flaggedCount[key] = (flaggedCount[key] ?? 0) + 1;
+  }
+
   const result: CampaignView[] = [];
   for (const campaign of campaigns) {
-    result.push(toView(campaign));
+    const view = toView(campaign);
+    view.flaggedPosts = flaggedCount[view.id] ?? 0;
+    result.push(view);
   }
   return result;
 }

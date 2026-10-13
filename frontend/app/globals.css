@@ -207,6 +207,11 @@ tr:last-child td {
   color: var(--bad);
 }
 
+.badge.warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 /* Spent-vs-budget bar */
 .bar {
   height: 8px;

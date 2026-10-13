@@ -7,6 +7,7 @@ export interface ISubmission {
   postLink: string;
   views: number; // latest view count from the platform
   amountPaid: number; // rupees paid for this post so far, so we never pay twice
+  flagged: boolean; // true when the views jumped unusually fast, so a person can review it
 }
 
 const submissionSchema = new Schema<ISubmission>(
@@ -16,6 +17,7 @@ const submissionSchema = new Schema<ISubmission>(
     postLink: { type: String, required: true },
     views: { type: Number, default: 0, min: 0 },
     amountPaid: { type: Number, default: 0, min: 0 },
+    flagged: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -16,6 +16,7 @@ export interface Campaign {
   spent: number;
   remaining: number;
   exhausted: boolean;
+  flaggedPosts: number;
   milestones: Milestone[];
 }
 
@@ -26,6 +27,7 @@ export interface Submission {
   postLink: string;
   views: number;
   amountPaid: number;
+  flagged: boolean;
 }
 
 export interface MySubmissions {
@@ -37,6 +39,7 @@ export interface UpdateViewsResult {
   paidNow: number;
   amountPaid: number;
   budgetRanOut: boolean;
+  flagged: boolean;
 }
 
 export type AuthResult = Session;
